@@ -119,7 +119,7 @@ public class MapLoader
         MapLoader.RawMapToMap(raw, out MapLoader.currentMap);
         
 
-        MapLoader.currentMap.height = (int)Mathf.Floor(MapLoader.currentMap.terrains[0].Length / MapLoader.currentMap.width);
+        MapLoader.currentMap.height = (int)Mathf.Floor(MapLoader.currentMap.terrains[0].Length / MapLoader.currentMap.width) + 1;
 
         MapLoader.InstantiateFields(mapRoot, tilePool, fieldPrototype, verticalFieldPrototype, fieldColliderPrototype, onEachTile);
         MapLoader.InstantiateWalkerBehaviors(mapRoot, walkerPrototype);
@@ -332,7 +332,7 @@ public class MapLoader
             }
 
             FieldCollider fieldCollider = GameObject.Instantiate<FieldCollider>(fieldColliderPrototype);
-            float height = Mathf.Floor(map.fields[0].Length / width);
+            float height = Mathf.Floor(map.fields[0].Length / width) + 1;
             fieldCollider.Init(width, height, floor);
             fieldCollider.transform.parent = mapRoot.transform;
             // TODO:
