@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Article
 {
+    [RequireComponent(typeof(EventTrigger))]
     public class Tile : MonoBehaviour
     {
         [SerializeField]
@@ -9,9 +12,28 @@ namespace Article
         [SerializeField]
         private Vector2 tilePos = Vector2.zero;
 
+        private UnityAction<Tile, BaseEventData> callback = null;
+
         private void Start()
         {
             this.UpdateUV();
+        }
+
+        public void InitCollider(UnityAction<Tile, BaseEventData> callback)
+        {
+            this.callback = callback;
+
+            EventTrigger trigger = this.GetComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerDown;
+            entry.callback.AddListener(this.OnPointerDown);
+
+            trigger.triggers.Add(entry);
+        }
+
+        private void OnPointerDown(BaseEventData data)
+        {
+            this.callback?.Invoke(this, data);
         }
 
         public void SetTilePos(int index)
